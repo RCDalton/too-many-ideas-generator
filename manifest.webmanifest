@@ -1,0 +1,9 @@
+{
+  "name": "Too Many Ideas",
+  "short_name": "Too Many Ideas",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f1e7",
+  "theme_color": "#f6f1e7",
+  "description": "A three-prompt generator for Too Many Ideas."
+}

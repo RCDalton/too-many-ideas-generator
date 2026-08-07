@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f1e7">
+<title>Too Many Ideas</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--paper:#f6f1e7;--ink:#20231f;--muted:#6d726b;--line:#d8d0c3;--card:#fffdf8;--accent:#315e47}
+*{box-sizing:border-box} html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{display:flex;justify-content:center}
+main{width:min(760px,100%);min-height:100vh;padding:max(28px,env(safe-area-inset-top)) 22px max(28px,env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:space-between}
+header{text-align:center;margin-bottom:20px}
+h1{font-size:clamp(2.1rem,9vw,4.8rem);line-height:.94;margin:0;font-weight:850;letter-spacing:-.05em}
+.strap{margin:.8rem 0 0;color:var(--muted);font-size:clamp(.95rem,3vw,1.12rem)}
+.cards{display:grid;gap:14px;margin:24px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;min-height:112px;padding:24px 20px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(1.55rem,6vw,2.6rem);font-weight:760;letter-spacing:-.03em;box-shadow:0 6px 22px rgba(0,0,0,.045);transition:transform .16s ease,opacity .16s ease}
+.card.shuffle{transform:scale(.985) translateY(3px);opacity:.45}
+.controls{display:grid;grid-template-columns:1fr auto;gap:10px}
+button{border:0;border-radius:999px;padding:16px 20px;font-size:1rem;font-weight:780;cursor:pointer}
+#generate{background:var(--accent);color:#fff}
+#copy{background:#e8e1d5;color:var(--ink);min-width:92px}
+.hint{text-align:center;color:var(--muted);font-size:.82rem;margin:14px 0 0}
+footer{text-align:center;color:var(--muted);font-size:.86rem;padding-top:28px}
+.manifesto{font-weight:720;color:var(--ink)}
+</style>
+</head>
+<body>
+<main>
+<div>
+<header>
+<h1>Too Many Ideas</h1>
+<p class="strap">Too little time. Take what you need.</p>
+</header>
+
+<section class="cards" aria-live="polite">
+<div class="card" id="word1">Tap the button</div>
+<div class="card" id="word2">and shake up</div>
+<div class="card" id="word3">the hourglass</div>
+</section>
+
+<div class="controls">
+<button id="generate">SHAKE THE HOURGLASS</button>
+<button id="copy">COPY</button>
+</div>
+<p class="hint">One home concept · one borrowed concept · one piece of grist</p>
+</div>
+
+<footer><span class="manifesto">Too Many Ideas. Too Little Time. Take What You Need.</span></footer>
+</main>
+
+<script src="data.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const cards=[$("word1"),$("word2"),$("word3")];
+let lastTriplet=[];
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function generateTriplet(){
+  const parent=pick(Object.keys(CORE));
+  const triplet=[pick(CORE[parent]),pick(BORROW),pick(GRIST)];
+  cards.forEach(c=>c.classList.add("shuffle"));
+  setTimeout(()=>{
+    lastTriplet=triplet;
+    cards.forEach((c,i)=>c.textContent=triplet[i]);
+    cards.forEach(c=>c.classList.remove("shuffle"));
+  },140);
+}
+$("generate").addEventListener("click",generateTriplet);
+$("copy").addEventListener("click",async()=>{
+  if(!lastTriplet.length)return;
+  const text=lastTriplet.join(" · ");
+  try{
+    await navigator.clipboard.writeText(text);
+    $("copy").textContent="COPIED";
+    setTimeout(()=>$("copy").textContent="COPY",1000);
+  }catch(e){window.prompt("Copy your triplet:",text)}
+});
+generateTriplet();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"))}
+</script>
+</body>
+</html>
