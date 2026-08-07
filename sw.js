@@ -1,4 +1,4 @@
-const CACHE='tmi-v2';
+const CACHE='tmi-v3';
 const FILES=[
   './',
   './index.html',
