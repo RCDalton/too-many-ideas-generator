@@ -5,5 +5,13 @@
   "display": "standalone",
   "background_color": "#f6f1e7",
   "theme_color": "#f6f1e7",
-  "description": "A three-prompt generator for Too Many Ideas."
+  "description": "A three-prompt generator for Too Many Ideas.",
+  "icons": [
+    {
+      "src": "./tmi_icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
